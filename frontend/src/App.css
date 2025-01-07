@@ -94,3 +94,27 @@
   height: auto;
   border-radius: 20px;
 }
+
+
+
+/* ---------------------------------------------------------------------------- */
+
+.fixedButton {
+  margin-top: 20px; /* Add some space between the h1 and the button */
+  background-color: #FF9839;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fixedButton a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+}

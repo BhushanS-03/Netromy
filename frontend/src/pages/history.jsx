@@ -1,5 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '../contexts/AuthContext'
+
+
+
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import Box from '@mui/material/Box';
@@ -8,81 +11,57 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import HomeIcon from '@mui/icons-material/Home';
+import { IconButton, Container, Grid, AppBar, Toolbar } from '@mui/material';
 
-import { IconButton } from '@mui/material';
 export default function History() {
-
-
     const { getHistoryOfUser } = useContext(AuthContext);
-
-    const [meetings, setMeetings] = useState([])
-
-
+    const [meetings, setMeetings] = useState([]);
     const routeTo = useNavigate();
 
     useEffect(() => {
-        const fetchHistory = async () => {
-            try {
-                const history = await getHistoryOfUser();
-                setMeetings(history);
-            } catch {
-                // IMPLEMENT SNACKBAR
-            }
+        async function fetchHistory() {
+            const history = await getHistoryOfUser();
+            setMeetings(history);
         }
-
         fetchHistory();
-    }, [])
-
-    let formatDate = (dateString) => {
-
-        const date = new Date(dateString);
-        const day = date.getDate().toString().padStart(2, "0");
-        const month = (date.getMonth() + 1).toString().padStart(2, "0")
-        const year = date.getFullYear();
-
-        return `${day}/${month}/${year}`
-
-    }
+    }, [getHistoryOfUser]);
 
     return (
         <div>
-
-            <IconButton onClick={() => {
-                routeTo("/home")
-            }}>
-                <HomeIcon />
-            </IconButton >
-            {
-                (meetings.length !== 0) ? meetings.map((e, i) => {
-                    return (
-
-                        <>
-
-
-                            <Card key={i} variant="outlined">
-
-
+            <AppBar position="static" sx={{ backgroundColor: '#FF9839' }}>
+                <Toolbar>
+                    <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                        Meeting History
+                    </Typography>
+                    <IconButton color="inherit" onClick={() => routeTo('/home')}>
+                        <HomeIcon />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
+            <Container component="main" sx={{ mt: 4 }}>
+                <Grid container spacing={4}>
+                    {meetings.map((meeting, index) => (
+                        <Grid item xs={12} sm={6} md={4} key={index}>
+                            <Card sx={{ minHeight: 200, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <CardContent>
-                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        Code: {e.meetingCode}
+                                    <Typography variant="h5" component="div">
+                                        Meeting Code: {meeting.code}
                                     </Typography>
-
                                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                        Date: {formatDate(e.date)}
+                                        Date: {new Date(meeting.date).toLocaleDateString()}
                                     </Typography>
-
+                                    <Typography variant="body2">
+                                        {meeting.description}
+                                    </Typography>
                                 </CardContent>
-
-
+                                <CardActions>
+                                    <Button size="small" onClick={() => routeTo(`/${meeting.code}`)}>Rejoin</Button>
+                                </CardActions>
                             </Card>
-
-
-                        </>
-                    )
-                }) : <></>
-
-            }
-
+                        </Grid>
+                    ))}
+                </Grid>
+            </Container>
         </div>
-    )
+    );
 }
