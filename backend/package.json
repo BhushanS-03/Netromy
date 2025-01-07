@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "nodemon src/app.js",
     "start": "node src/app.js",
-    "prod": "pm2 src/app.js"
+    "prod": "pm2 src/app.js",
+    "postinstall": "npm rebuild bcrypt"
   },
   "author": "apnacollege",
   "license": "ISC",
